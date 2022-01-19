@@ -1,0 +1,8 @@
+public ImportDocumentationPartsResult importDocumentationParts(ImportDocumentationPartsRequest request) {request = beforeClientExecution(request);return executeImportDocumentationParts(request);}
+public void set(int index, long value) {final int o = index / 3;final int b = index % 3;final int shift = b * 21;blocks[o] = (blocks[o] & ~(2097151L << shift)) | (value << shift);}
+public DBSnapshot deleteDBSnapshot(DeleteDBSnapshotRequest request) {request = beforeClientExecution(request);return executeDeleteDBSnapshot(request);}
+public DVRecord(RecordInputStream in) {_option_flags = in.readInt();_promptTitle = readUnicodeString(in);_errorTitle = readUnicodeString(in);_promptText = readUnicodeString(in);_errorText = readUnicodeString(in);int field_size_first_formula = in.readUShort();_not_used_1 = in.readShort();_formula1 = Formula.read(field_size_first_formula, in);int field_size_sec_formula = in.readUShort();_not_used_2 = in.readShort();_formula2 = Formula.read(field_size_sec_formula, in);_regions = new CellRangeAddressList(in);}
+public String toString() {return getClass().getName() + " [" +_error.getString() +"]";}
+public void set(int index, long value) {final int o = index >>> 4;final int b = index & 15;final int shift = b << 2;blocks[o] = (blocks[o] & ~(15L << shift)) | (value << shift);}
+public IntBuffer put(int index, int c) {checkIndex(index);byteBuffer.putInt(index * SizeOf.INT, c);return this;}
+public DeleteVpnConnectionRouteResult deleteVpnConnectionRoute(DeleteVpnConnectionRouteRequest request) {request = beforeClientExecution(request);return executeDeleteVpnConnectionRoute(request);}

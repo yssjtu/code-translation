@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="RemoteMappingsManager">
+    <list>
+      <list>
+        <remote-mappings server-id="python@95751b27-be43-4ffd-8329-dd57ef3b3e4f" />
+        <remote-mappings server-id="python@sftp://user@202.120.40.28:1358/home/user/anaconda3/envs/codeT5_modified_huggingface/bin/python">
+          <settings>
+            <list>
+              <mapping local-root="$PROJECT_DIR$" remote-root="/mnt/sda/ys/codeT5/CodeT5" />
+            </list>
+          </settings>
+        </remote-mappings>
+      </list>
+    </list>
+  </component>
+</project>
