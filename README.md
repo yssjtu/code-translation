@@ -24,7 +24,7 @@ python run_exp_softprompt.py --model_tag codet5_base --task translate --sub_task
 ```
 
 
-FSCT:
+FSCTrans:
 ```
 python run_exp_softprompt.py --model_tag codet5_base --task translate --sub_task python-go --gpu 0 --gradient_accumulation_steps 1 --filename_end fewshot_8_LeetcodeData_FSCT --prompt_len 100 --prompt_type 3 --few_shot 8 --patience 300 --epoch 10000 --LMadaption 2
 ```
