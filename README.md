@@ -8,16 +8,17 @@ Code translation has long been suffering from scarce parallel code corpora. Rece
 
 
 **Usage**
-Go to 'sh' folder, take python->go translation as example,
+
+Go to the 'sh' folder, take the python->go translation as example,
 
 
-fine-tune on the original codeT5:
+Fine-tuning on the original codeT5:
 ```
 python run_exp_softprompt.py --model_tag codet5_base --task translate --sub_task python-go --gpu 0 --gradient_accumulation_steps 1 --filename_end fewshot_8_LeetcodeData_finetune --prompt_len 0 --prompt_type 3 --few_shot 8 --patience 300 --epoch 10000
 ```
 
 
-directly prefix tuning on the original codeT5:
+Directly prompt learning on the original codeT5:
 ```
 python run_exp_softprompt.py --model_tag codet5_base --task translate --sub_task python-go --gpu 0 --gradient_accumulation_steps 1 --filename_end fewshot_8_LeetcodeData_prefix --prompt_len 100 --prompt_type 3 --few_shot 8 --patience 300 --epoch 10000
 ```
