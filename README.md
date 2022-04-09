@@ -32,5 +32,5 @@ python run_exp_softprompt.py --model_tag codet5_base --task translate --sub_task
 
 
 **Main Results**
-![Results](results.png)
+![Results](main_results.png)
 
