@@ -322,8 +322,7 @@ class Codet5_decoder_prefix(torch.nn.Module):
                         0, expanded_return_idx.to(encoder_outputs.last_hidden_state.device)
                     ), self.codet5_model.decoder)
 
-        #怎么构造decoder_attn_mask???
-        #当前实现下，必须use_cache=true
+
         outputs=self.codet5_model.generate(
             # source_ids,
             encoder_outputs=encoder_outputs,
@@ -374,7 +373,7 @@ class Codet5_encoder_decoder_prefix(torch.nn.Module):
                                     labels=labels,
                                     decoder_attention_mask=decoder_prefix_mask,
                                     past_key_values=decoder_prompt_embed,
-                                    #pr 测试，训练时设置 use_cache=false
+                                    
                                     use_cache=False
                                     )
         return outputs
@@ -395,7 +394,6 @@ class Codet5_encoder_decoder_prefix(torch.nn.Module):
             return_dict=return_dict,
         )
 
-        # bug, encoder prefix可以随便改batch，但是decoder如果改了 batch，对应的encoder_outputs也要跟着复制或者改变！！！不然crossattn的past_key_values的维度会不对应！！
 
         # input_ids, model_kwargs = self._expand_inputs_for_generation(
         #         input_ids, expand_size=num_beams, is_encoder_decoder=self.config.is_encoder_decoder, **model_kwargs
