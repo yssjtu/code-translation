@@ -40,7 +40,7 @@ Our contributions can be summarized as:
 
 **Usage**
 
-Train/valid/test data is under [data_sample_8](data_sample_8/translate/). Source code for our prompt learning module is in [model.py](model.py).
+Train/valid/test data is under [data_sample_8](data_sample_8/translate/). Source code for our prompt learning module is in [model.py](models.py).
 
 Go to the 'sh' folder, take the python->java translation as example,
 
