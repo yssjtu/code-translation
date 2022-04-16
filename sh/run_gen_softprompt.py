@@ -19,12 +19,7 @@ GPT and GPT-2 are fine-tuned using a causal language modeling (CLM) loss while B
 using a masked language modeling (MLM) loss.
 """
 import os
-import sys
-sys.path.append('..')
-# os.environ['CUDA_VISIBLE_DEVICES'] = "0"
-
-import models
-
+os.environ['CUDA_VISIBLE_DEVICES'] = "0"
 import torch
 import logging
 import argparse
@@ -40,7 +35,7 @@ from torch.utils.tensorboard import SummaryWriter
 from torch.utils.data import DataLoader, SequentialSampler, RandomSampler
 from torch.utils.data.distributed import DistributedSampler
 from transformers import AdamW, get_linear_schedule_with_warmup
-from models import build_or_load_gen_model,freeze_codet5,add_soft_prompt,gen_prompt_id_and_mask
+from models import build_or_load_gen_model
 from evaluator import smooth_bleu
 from evaluator.CodeBLEU import calc_code_bleu
 from evaluator.bleu import _bleu
@@ -52,23 +47,6 @@ logging.basicConfig(format='%(asctime)s - %(levelname)s - %(name)s -   %(message
                     level=logging.INFO)
 logger = logging.getLogger(__name__)
 
-def print_params(model):
-    Total_params = 0
-    Trainable_params = 0
-    NonTrainable_params = 0
-
-    # 遍历model.parameters()返回的全局参数列表
-    for param in model.parameters():
-        mulValue = np.prod(param.size())  # 使用numpy prod接口计算参数数组所有元素之积
-        Total_params += mulValue  # 总参数量
-        if param.requires_grad:
-            Trainable_params += mulValue  # 可训练参数量
-        else:
-            NonTrainable_params += mulValue  # 非可训练参数量
-
-    print(f'Total params: {Total_params}')
-    print(f'Trainable params: {Trainable_params}')
-    print(f'Non-trainable params: {NonTrainable_params}')
 
 def eval_ppl_epoch(args, eval_data, eval_examples, model, tokenizer):
     eval_sampler = SequentialSampler(eval_data)
@@ -84,11 +62,7 @@ def eval_ppl_epoch(args, eval_data, eval_examples, model, tokenizer):
     for batch in tqdm(eval_dataloader, total=len(eval_dataloader), desc="Eval ppl"):
         batch = tuple(t.to(args.device) for t in batch)
         source_ids, target_ids = batch
-
         source_mask = source_ids.ne(tokenizer.pad_token_id)
-        if(args.prompt_len>0):
-            source_ids,source_mask=gen_prompt_id_and_mask(source_ids,source_mask,args.prompt_len)
-            # source_mask=gen_prompt_mask(source_mask,args.prompt_len)
         target_mask = target_ids.ne(tokenizer.pad_token_id)
 
         with torch.no_grad():
@@ -124,8 +98,6 @@ def eval_bleu_epoch(args, eval_data, eval_examples, model, tokenizer, split_tag,
     for batch in tqdm(eval_dataloader, total=len(eval_dataloader), desc="Eval bleu for {} set".format(split_tag)):
         source_ids = batch[0].to(args.device)
         source_mask = source_ids.ne(tokenizer.pad_token_id)
-        if(args.prompt_len>0):
-            source_ids,source_mask=gen_prompt_id_and_mask(source_ids,source_mask,args.prompt_len)
         with torch.no_grad():
             if args.model_type == 'roberta':
                 preds = model(source_ids=source_ids, source_mask=source_mask)
@@ -201,7 +173,6 @@ def main():
     parser = argparse.ArgumentParser()
     args = add_args(parser)
     logger.info(args)
-    os.environ['CUDA_VISIBLE_DEVICES'] = args.gpu
     t0 = time.time()
 
     set_dist(args)
@@ -211,18 +182,6 @@ def main():
     if args.n_gpu > 1:
         # for DataParallel
         model = torch.nn.DataParallel(model)
-
-
-
-#尝试先finetune 一个epoch再开始 prompt tuning
-    if args.prompt_len>0:
-        freeze_codet5(model)
-        add_soft_prompt(model,args.prompt_len)
-
-    # print model structure
-    print(model)
-
-
     pool = multiprocessing.Pool(args.cpu_cont)
     args.train_filename, args.dev_filename, args.test_filename = get_filenames(args.data_dir, args.task, args.sub_task)
     fa = open(os.path.join(args.output_dir, 'summary.log'), 'a+')
@@ -262,28 +221,15 @@ def main():
         dev_dataset = {}
         global_step, best_bleu_em, best_ppl = 0, -1, 1e6
         not_loss_dec_cnt, not_bleu_em_inc_cnt = 0, 0 if args.do_eval_bleu else 1e6
-        print_params(model)
+
         for cur_epoch in range(args.start_epoch, int(args.num_train_epochs)):
             bar = tqdm(train_dataloader, total=len(train_dataloader), desc="Training")
             nb_tr_examples, nb_tr_steps, tr_loss = 0, 0, 0
-
             model.train()
-
-            # if(cur_epoch==2):
-            #     if args.prompt_len>0:
-            #         logger.info("start tuning softprompt...")
-            #
-            #         freeze_codet5(model)
-            #         add_soft_prompt(model,args.prompt_len)
-            #         print_params(model)
-
-
             for step, batch in enumerate(bar):
                 batch = tuple(t.to(args.device) for t in batch)
                 source_ids, target_ids = batch
                 source_mask = source_ids.ne(tokenizer.pad_token_id)
-                if (args.prompt_len > 0):
-                    source_ids,source_mask = gen_prompt_id_and_mask(source_ids,source_mask, args.prompt_len)
                 target_mask = target_ids.ne(tokenizer.pad_token_id)
 
                 if args.model_type == 'roberta':
@@ -367,9 +313,6 @@ def main():
                 logger.info("***** CUDA.empty_cache() *****")
                 torch.cuda.empty_cache()
                 if args.do_eval_bleu:
-                    if (eval_ppl < 1.5 and args.task == 'translate'):
-                        logger.info("no bleu, wait for translation model converge... ")
-
                     eval_examples, eval_data = load_and_cache_gen_data(args, args.dev_filename, pool, tokenizer, 'dev',
                                                                        only_src=True, is_sample=True)
 
@@ -425,7 +368,6 @@ def main():
             file = os.path.join(args.output_dir, 'checkpoint-{}/pytorch_model.bin'.format(criteria))
             logger.info("Reload model from {}".format(file))
             model.load_state_dict(torch.load(file))
-            print_params(model)
             eval_examples, eval_data = load_and_cache_gen_data(args, args.test_filename, pool, tokenizer, 'test',
                                                                only_src=True, is_sample=False)
             result = eval_bleu_epoch(args, eval_data, eval_examples, model, tokenizer, 'test', criteria)

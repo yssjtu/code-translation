@@ -6,7 +6,6 @@ import re
 def summary_exp_results(task,subtask,prefix,infix,outname):
     mids=["finetune_prefixlen0","prefix_prefixlen100","lmadaption1_prefixlen100","lmadaption2_finetune_prefixlen0","lmadaption2_prefix_prefixlen100","lmadaption3_prefixlen100"]
 
-    # 表头
     field_order = ["mehtod", '[best-bleu]-bleu','[best-ppl]-bleu','[last]-bleu', '[best-bleu]-em','[best-ppl]-em','[last]-em', '[best-bleu]-codebleu','[best-ppl]-codebleu','[last]-codebleu','params']
     if not os.path.exists("/mnt/sda/ys/codeT5/CodeT5/sh/saved_models/"+task+"/"+subtask+"/results_csv"):
         os.makedirs("/mnt/sda/ys/codeT5/CodeT5/sh/saved_models/"+task+"/"+subtask+"/results_csv")
@@ -24,7 +23,6 @@ def summary_exp_results(task,subtask,prefix,infix,outname):
                     if "[best-bleu]" in line or "[best-ppl]" in line or "[last]" in line:
                         tmp_scores=re.findall("\d+\.\d+", line)
                         scores.append(tmp_scores)
-                #重新跑的实验，最后三行才是准确结果
                 scores=scores[-3:]
                 for i in range(3):
                     for j in range(3):
@@ -35,7 +33,6 @@ def summary_exp_results(task,subtask,prefix,infix,outname):
 def summary_exp_results_new(task,subtask,prefix,infix,outname):
     mids=["finetune_prefixlen0","prefix_prefixlen100","lmadaption2_finetune_prefixlen0","lmadaption2_prefix_prefixlen100"]
 
-    # 表头
     field_order = ["mehtod", 'Bleu-4', 'Acc', 'CodeBLEU']
     if not os.path.exists("/mnt/sda/ys/codeT5/CodeT5/sh/saved_models/"+task+"/"+subtask+"/results_csv"):
         os.makedirs("/mnt/sda/ys/codeT5/CodeT5/sh/saved_models/"+task+"/"+subtask+"/results_csv")
@@ -53,7 +50,6 @@ def summary_exp_results_new(task,subtask,prefix,infix,outname):
                     if "[best-bleu]" in line or "[best-ppl]" in line or "[last]" in line:
                         tmp_scores=re.findall("\d+\.\d+", line)
                         scores.append(tmp_scores)
-                #重新跑的实验，最后三行才是准确结果
                 scores=scores[-3:]
                 best_score=scores[0]
                 for i in range(2):
@@ -68,7 +64,6 @@ def summary_exp_results_new(task,subtask,prefix,infix,outname):
 def summary_exp_results_datasize_ablation(task,subtask,prefix,infix,outname):
     mids=["finetune_prefixlen0","prefix_prefixlen100","lmadaption2_finetune_prefixlen0","lmadaption2_prefix_prefixlen100"]
 
-    # 表头
     field_order = ["mehtod", 'Bleu-4', 'Acc', 'CodeBLEU']
     if not os.path.exists("/mnt/sda/ys/codeT5/CodeT5/sh/saved_models/"+task+"/"+subtask+"/results_csv"):
         os.makedirs("/mnt/sda/ys/codeT5/CodeT5/sh/saved_models/"+task+"/"+subtask+"/results_csv")
@@ -86,7 +81,6 @@ def summary_exp_results_datasize_ablation(task,subtask,prefix,infix,outname):
                     if "[best-bleu]" in line or "[best-ppl]" in line or "[last]" in line:
                         tmp_scores=re.findall("\d+\.\d+", line)
                         scores.append(tmp_scores)
-                #重新跑的实验，最后三行才是准确结果
                 scores=scores[-3:]
                 best_score=scores[0]
                 for i in range(2):

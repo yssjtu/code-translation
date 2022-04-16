@@ -36,13 +36,10 @@ class PromptEncoder(torch.nn.Module):
         #     # self.embedding.weight[0, :] = 0
         #     self.embedding.weight[0:prompt_len, :] = init_embedding.weight[5:prompt_len + 5, :].data
 
-        #用word embed初始化prompt embed
         self.softprompt_embed=nn.parameter.Parameter(self.wte.weight[1000:prompt_len+1000].clone().detach())
 
     def forward(self, input_ids=None):
-        #保证内部position ，type emb和input embed拼接维度一致，拼接prompt要删掉末尾对应长度的padding。
-     #   input_ids=input_ids[:,:input_ids.shape[1]-prompt_len]
-        #提前在输入id前 pad promp_len长度的随便什么token.
+
         input_embedding = self.wte(input_ids[:,self.prompt_len:])
 
         # input_embedding=input_embedding[:,:input_embedding.shape[1]-prompt_len,:]
@@ -156,7 +153,6 @@ class PrefixDecoder(torch.nn.Module):
                                                self.config.num_attention_heads,
                                                self.config.hidden_size // self.config.num_attention_heads)
         # past_key_values = self.dropout(past_key_values)
-        #.contiguous() 要不要加上？
         past_key_values = past_key_values.permute([2, 0, 3, 1, 4]).split(2)
         # key_layer = self.transpose_for_scores(self.key(encoder_hidden_states))
         # value_layer = self.transpose_for_scores(self.value(encoder_hidden_states))
@@ -263,7 +259,6 @@ class Codet5_decoder_prefix(torch.nn.Module):
                                    labels=labels,
                                    decoder_attention_mask=decoder_prefix_mask,
                                    past_key_values=decoder_prompt_embed,
-                                   #pr 测试，训练设置false同时传入past就不会截取
                                    use_cache=False)
         return outputs
 
@@ -283,7 +278,6 @@ class Codet5_decoder_prefix(torch.nn.Module):
             return_dict=return_dict,
         )
 
-        #Todo: bug, encoder prefix可以随便改batch，但是decoder如果改了 batch，对应的encoder_outputs也要跟着复制或者改变！！！不然crossattn的past_key_values的维度会不对应！！
 
         # input_ids, model_kwargs = self._expand_inputs_for_generation(
         #         input_ids, expand_size=num_beams, is_encoder_decoder=self.config.is_encoder_decoder, **model_kwargs
@@ -448,8 +442,7 @@ class Codet5_encoder_decoder_prefix(torch.nn.Module):
                                                        expanded_return_idx.to(encoder_outputs.last_hidden_state.device)
                                                    ), self.codet5_model.decoder)
 
-        # 怎么构造decoder_attn_mask??? 不用构建，默认空的话相当于全mask .
-        # 当前实现下，必须use_cache=true
+
         outputs = self.codet5_model.generate(
             # source_ids,
             encoder_outputs=encoder_outputs,
@@ -464,7 +457,7 @@ class Codet5_encoder_decoder_prefix(torch.nn.Module):
         return outputs
 def freeze_codet5(model):
     for name,param in model.named_parameters():
-        #尝试修改
+
         #if("shared." not in name):
             param.requires_grad = False
 
@@ -479,10 +472,9 @@ def gen_prompt_id_and_mask(source_ids,source_mask,prompt_len):
     prompt_pad=torch.zeros(source_ids.shape[0], prompt_len).long().to(source_ids.device)
     prompt_mask = torch.ones(source_mask.shape[0], prompt_len).long().to(source_mask.device)
     # since we add #prompt_len prompt tokens ahead of input,accordingly adding source mask（1 for not masked，0 for masked）
-    # 直接拼接prompt和原来的embedding，长为532
+
     # source_mask = torch.cat([prompt_mask, source_mask], 1)
 
-    # 将原来embedding后prompt len的长度截掉，再把prompt拼在前面，总长512
     source_ids=torch.cat([prompt_pad, source_ids], 1)
     source_mask=torch.cat([prompt_mask, source_mask], 1)
     return source_ids,source_mask
@@ -491,10 +483,8 @@ def gen_prefix(source_ids,source_mask,prompt_len):
     prompt_pad=torch.zeros(source_ids.shape[0], prompt_len).long().to(source_ids.device)
     prompt_mask = torch.ones(source_mask.shape[0], prompt_len).long().to(source_mask.device)
     # since we add #prompt_len prompt tokens ahead of input,accordingly adding source mask（1 for not masked，0 for masked）
-    # 直接拼接prompt和原来的embedding，长为532
     # source_mask = torch.cat([prompt_mask, source_mask], 1)
 
-    # 将原来embedding后prompt len的长度截掉，再把prompt拼在前面，总长512
     source_ids=torch.cat([prompt_pad, source_ids], 1)
     source_mask=torch.cat([prompt_mask, source_mask], 1)
     return source_ids,source_mask
@@ -560,7 +550,6 @@ def build_or_load_gen_model(args):
                                                tokenizer_path=args.tokenizer_path)
     logger.info("Finish loading model [%s] from %s", get_model_size(model), args.model_name_or_path)
 
-    # #如果只使用LM adaption，在这里reload LMadaption之后的codeT5
     # if args.load_model_path is not None and args.LMadaption==2:
     #     logger.info("Reload model from {}".format(args.load_model_path))
     #     model.load_state_dict(torch.load(args.load_model_path))

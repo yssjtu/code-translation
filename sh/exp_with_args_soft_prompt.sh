@@ -1,6 +1,6 @@
-export HF_DATASETS_CACHE="/export/share/wang.y/workspace/cache_data"
-export TRANSFORMERS_CACHE="/export/share/wang.y/workspace/cache_model"
-export XDG_CACHE_HOME="/export/share/wang.y/workspace/cache_model"
+export HF_DATASETS_CACHE="/export/share/xxx/workspace/cache_data"
+export TRANSFORMERS_CACHE="/export/share/wxx/workspace/cache_model"
+export XDG_CACHE_HOME="/export/share/xxx/workspace/cache_model"
 export WORKDIR="."
 export PYTHONPATH=$WORKDIR
 

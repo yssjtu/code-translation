@@ -3,7 +3,7 @@ import os
 import random
 import re
 import csv
-#删除?/**/注释的正则表达式应该写成  /\*[\s\S]*?\*/
+#reg for deleting /**/ comments:   /\*[\s\S]*?\*/
 
 def check_contain_chinese(check_str):
     for ch in check_str:
@@ -12,12 +12,12 @@ def check_contain_chinese(check_str):
     return False
 
 def replace(str):
-    #要不要把 <>也加进去？ 这样可能会影响 大于小于号
+
     replacestr=['(',')','[',']','{','}',',','.','>','<']
     for i in replacestr:
         pattern = re.compile(r'\s*['+i+']\s*')
         str=pattern.sub(i,str)
-    #函数体开头前面加上空格
+
     str=str[:str.find("){")+1]+" "+str[str.find("){")+1:]
 
     # str=str.replace("){",") {")
@@ -50,12 +50,12 @@ def clean_java():
                 annotation_idx = []
 
                 for n in range(len(code_tokens)):
-                    # 删除空白token
+
 
                     if len(code_tokens[n]) == 0:
                         annotation_idx.append(n)
                     else:
-                        # 删除注释
+
                         first2_char = code_tokens[n][0:2]
                         last_char = code_tokens[n][-1]
                         first3_char = code_tokens[n][0:3]
@@ -65,11 +65,11 @@ def clean_java():
 
                         if first3_char == "'''" or first3_char == '"""' or last3_char == "'''" or last3_char == '"""':
                             annotation_idx.append(n)
-                        # # 如果token为字符串，将空白替换为下划线 作为完整的一个token  //这样的话只提取代码信息，没有字符串信息 可以加以试验
+
                         # if first_char == '"' or last_char == '"' or first_char == "'" or last_char == '"':
                         #     code_tokens[n] = " ".join(token.split())
 
-                # 删除后 idx是变化的
+
                 for m in range(len(annotation_idx)):
                     del code_tokens[annotation_idx[m] - m]
 
@@ -86,8 +86,7 @@ def clean_java():
                 # pattern = re.compile(r'}\n}')
                 # code_token = pattern.sub("}} ", code_token)
 
-                #上面是code_tokens处理，下面直接处理 code
-                # 去除注释 /* */
+
                 code=js['code']
                 pattern = re.compile(r'//.*\n')
                 code = pattern.sub(" ", code)
@@ -107,7 +106,7 @@ def clean_java():
 def clean_csharp():
     f_out=open("/mnt/sda/ys/codeT5/CodeT5/data/LMadaption/codes.cs", 'w',
                  encoding='utf-8')
-    #要不要把注释去掉？ 应该是要的吧， 去的话，翻译任务肯定是看不到自然语言注释的
+
     src_file = "/mnt/sda/ys/codeT5/CodeT5/data/csharp_github/train.txt"
     with open(src_file, encoding="utf-8") as f:
         for idx, line in enumerate(f):
@@ -123,15 +122,15 @@ def clean_csharp():
             line=line[line.rfind("<CODESPLIT>")+11:]
             if check_contain_chinese(line):
                 continue
-            #去除注释 /* */
+
             pattern = re.compile(r'/\*.*\*/')
             line = pattern.sub(" ", line)
 
-            #去掉注释 //.....
+
             pattern = re.compile(r'//.*\n')
             line = pattern.sub(" ", line)
             line = ' '.join(line.split())
-            #去掉不是一个函数的不完整的代码
+
             idx=line.find(')')
             if idx==-1 or idx>=len(line)-2:
                 continue
@@ -316,7 +315,6 @@ def conbine_twofile(src1,src2,out):
     f_out.close()
     print("done")
 
-#处理 transcoder数据， java cpp， python 相同问题下的不同写法
 def clean_TransCoder_data(src,out):
     f_out = open(out, 'w', encoding='utf-8')
     with open(src, encoding="utf-8") as f:
@@ -369,7 +367,6 @@ def sample_TransCoder_data(src_java,src_python,src_cpp, train_num,valid_num):
         f_python_test.writelines(lines_python[idx])
         f_cpp_test.writelines(lines_cpp[idx])
 
-#处理codesearchnet的python数据， 为transcoder做 PPT，
 def clean_codeSearchNet_java(path):
     out1 = open(path + "/java.code_token", 'w', encoding='utf-8')
     out2= open(path+ "/java.src_code","w",encoding='utf-8')
@@ -392,11 +389,9 @@ def clean_codeSearchNet_java(path):
                     annotation_idx = []
 
                     for n in range(len(code_tokens)):
-                        # 删除空白token
                         if len(code_tokens[n]) == 0:
                             annotation_idx.append(n)
                         else:
-                            # 删除注释
                             first2_char = code_tokens[n][0:2]
                             last_char = code_tokens[n][-1]
                             first3_char = code_tokens[n][0:3]
@@ -405,11 +400,9 @@ def clean_codeSearchNet_java(path):
                                 annotation_idx.append(n)
                             if first3_char == "'''" or first3_char == '"""' or last3_char == "'''" or last3_char == '"""':
                                 annotation_idx.append(n)
-                            # # 如果token为字符串，将空白替换为下划线 作为完整的一个token  //这样的话只提取代码信息，没有字符串信息 可以加以试验
                             # if first_char == '"' or last_char == '"' or first_char == "'" or last_char == '"':
                             #     code_tokens[n] = " ".join(token.split())
 
-                    # 删除后 idx是变化的
                     for m in range(len(annotation_idx)):
                         del code_tokens[annotation_idx[m] - m]
 
@@ -420,7 +413,7 @@ def clean_codeSearchNet_java(path):
                     code_token = ' '.join(code_token.split())
                     if check_contain_chinese(code_token):
                         continue
-                        # transcoder这里为什么python不和java cpp一致，调用.前后都加上空格呢？？
+
                     # code_token = code_token.replace('. ', '.').replace(' .', '.')
                     # code_token = code_token.replace('> >', '>>').replace('< <', '<<')
 
@@ -428,7 +421,6 @@ def clean_codeSearchNet_java(path):
                     # pattern = re.compile(r'}\n}')
                     # code_token = pattern.sub("}} ", code_token)
 
-                    # 上面是code_tokens处理，下面直接处理 code
 
 
 
@@ -475,11 +467,10 @@ def clean_codeSearchNet_python(path):
                     annotation_idx = []
 
                     for n in range(len(code_tokens)):
-                        # 删除空白token
                         if len(code_tokens[n]) == 0:
                             annotation_idx.append(n)
                         else:
-                            # 删除注释
+
                             first2_char = code_tokens[n][0:2]
                             last_char = code_tokens[n][-1]
                             first3_char = code_tokens[n][0:3]
@@ -488,7 +479,6 @@ def clean_codeSearchNet_python(path):
                                 annotation_idx.append(n)
                             if first3_char == "'''" or first3_char == '"""' or last3_char == "'''" or last3_char == '"""':
                                 annotation_idx.append(n)
-                            # # 如果token为字符串，将空白替换为下划线 作为完整的一个token  //这样的话只提取代码信息，没有字符串信息 可以加以试验
                             # if first_char == '"' or last_char == '"' or first_char == "'" or last_char == '"':
                             #     code_tokens[n] = " ".join(token.split())
 
@@ -511,8 +501,6 @@ def clean_codeSearchNet_python(path):
                     # pattern = re.compile(r'}\n}')
                     # code_token = pattern.sub("}} ", code_token)
 
-                    # 上面是code_tokens处理，下面直接处理 code
-                    # 去除注释 /* */
                     code = js['code']
                     pattern = re.compile(r'#.*\n')
                     code = pattern.sub(" ", code)
@@ -555,11 +543,10 @@ def clean_codeSearchNet_go(path):
                     annotation_idx = []
 
                     for n in range(len(code_tokens)):
-                        # 删除空白token
+
                         if len(code_tokens[n]) == 0:
                             annotation_idx.append(n)
                         else:
-                            # 删除注释
                             first2_char = code_tokens[n][0:2]
                             last_char = code_tokens[n][-1]
                             first3_char = code_tokens[n][0:3]
@@ -568,11 +555,9 @@ def clean_codeSearchNet_go(path):
                                 annotation_idx.append(n)
                             if first3_char == "'''" or first3_char == '"""' or last3_char == "'''" or last3_char == '"""':
                                 annotation_idx.append(n)
-                            # # 如果token为字符串，将空白替换为下划线 作为完整的一个token  //这样的话只提取代码信息，没有字符串信息 可以加以试验
                             # if first_char == '"' or last_char == '"' or first_char == "'" or last_char == '"':
                             #     code_tokens[n] = " ".join(token.split())
 
-                    # 删除后 idx是变化的
                     for m in range(len(annotation_idx)):
                         del code_tokens[annotation_idx[m] - m]
 
@@ -583,7 +568,6 @@ def clean_codeSearchNet_go(path):
                     code_token = ' '.join(code_token.split())
                     if check_contain_chinese(code_token):
                         continue
-                        # transcoder这里为什么python不和java cpp一致，调用.前后都加上空格呢？？
                     # code_token = code_token.replace('. ', '.').replace(' .', '.')
                     # code_token = code_token.replace('> >', '>>').replace('< <', '<<')
 
@@ -591,7 +575,6 @@ def clean_codeSearchNet_go(path):
                     # pattern = re.compile(r'}\n}')
                     # code_token = pattern.sub("}} ", code_token)
 
-                    # 上面是code_tokens处理，下面直接处理 code
 
                     code = js['code']
                     pattern = re.compile(r'//.*\n')
@@ -635,21 +618,16 @@ def clean_codeSearchNet_go(path):
 
 # sanity_check("/mnt/sda/ys/codeT5/CodeT5/data/summarize/smartContract/test.jsonl","/mnt/sda/ys/codeT5/CodeT5/data/summarize/smartContract/train.jsonl")
 
-# #transcoder 的test和valid合到一起
 # conbine_twofile("/mnt/sda/ys/codeT5/CodeT5/data/translate/transcoderData/transcoder_test.java.detok","/mnt/sda/ys/codeT5/CodeT5/data/translate/transcoderData/transcoder_valid.java.detok","/mnt/sda/ys/codeT5/CodeT5/data/translate/transcoderData/java.data")
 # conbine_twofile("/mnt/sda/ys/codeT5/CodeT5/data/translate/transcoderData/transcoder_test.python.detok","/mnt/sda/ys/codeT5/CodeT5/data/translate/transcoderData/transcoder_valid.python.detok","/mnt/sda/ys/codeT5/CodeT5/data/translate/transcoderData/python.data")
 # conbine_twofile("/mnt/sda/ys/codeT5/CodeT5/data/translate/transcoderData/transcoder_test.cpp.detok","/mnt/sda/ys/codeT5/CodeT5/data/translate/transcoderData/transcoder_valid.cpp.detok","/mnt/sda/ys/codeT5/CodeT5/data/translate/transcoderData/cpp.data")
 #
-# #把问题名去掉
 # clean_TransCoder_data("/mnt/sda/ys/codeT5/CodeT5/data/translate/transcoderData/java.data","/mnt/sda/ys/codeT5/CodeT5/data/translate/transcoderData/cleanjava.data")
 # clean_TransCoder_data("/mnt/sda/ys/codeT5/CodeT5/data/translate/transcoderData/python.data","/mnt/sda/ys/codeT5/CodeT5/data/translate/transcoderData/cleanpython.data")
 # clean_TransCoder_data("/mnt/sda/ys/codeT5/CodeT5/data/translate/transcoderData/cpp.data","/mnt/sda/ys/codeT5/CodeT5/data/translate/transcoderData/cleancpp.data")
 #
-# #切分数据
 # sample_TransCoder_data("/mnt/sda/ys/codeT5/CodeT5/data/translate/transcoderData/cleanjava.data","/mnt/sda/ys/codeT5/CodeT5/data/translate/transcoderData/cleanpython.data","/mnt/sda/ys/codeT5/CodeT5/data/translate/transcoderData/cleancpp.data",32,32)
 
-#生成java-python的 LMadaption data
-#这些数据用来 LMadaption或者ppt，现在使用java-cs翻译框架做，所以跑的时候还是得指定java-cs
 # clean_codeSearchNet_python("/mnt/sda/ys/codeT5/CodeT5/data/codesearchnet/python")
 # clean_codeSearchNet_java("/mnt/sda/ys/codeT5/CodeT5/data/codesearchnet/java")
 
@@ -664,7 +642,7 @@ def clean_codeSearchNet_go(path):
 # sample_TransCoder_data("/mnt/sda/ys/codeT5/CodeT5/data/translate/transcoderData/cleanjava.data","/mnt/sda/ys/codeT5/CodeT5/data/translate/transcoderData/cleanpython.data","/mnt/sda/ys/codeT5/CodeT5/data/translate/transcoderData/cleancpp.data",8,8)
 # sample_TransCoder_data("/mnt/sda/ys/codeT5/CodeT5/data/translate/transcoderData/cleanjava.data","/mnt/sda/ys/codeT5/CodeT5/data/translate/transcoderData/cleanpython.data","/mnt/sda/ys/codeT5/CodeT5/data/translate/transcoderData/cleancpp.data",500,100)
 
-#leetcode python-go  java-go LMadaption 数据处理
+#leetcode python-go  java-go LMadaption
 # clean_codeSearchNet_java("/mnt/sda/ys/codeT5/CodeT5/data/codesearchnet/java")
 # clean_codeSearchNet_go("/mnt/sda/ys/codeT5/CodeT5/data/codesearchnet/go")
 # conbine_twofile("/mnt/sda/ys/codeT5/CodeT5/data/codesearchnet/java/java.src_code_filtered","/mnt/sda/ys/codeT5/CodeT5/data/codesearchnet/go/go.src_code_filtered","/mnt/sda/ys/codeT5/CodeT5/data/LMadaption_leetcodedata/java-go.conbine.data")

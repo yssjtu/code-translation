@@ -157,7 +157,7 @@ if __name__ == '__main__':
     parser.add_argument("--epoch", type=int, default=-1)
     parser.add_argument("--bs", type=int, default=-1)
     parser.add_argument("--lr", type=int, default=-1)
-    #fewshot后面跟 data_sample_xxx表示sample的数量，few shot=-1时，使用LM adaption数据集
+
     parser.add_argument("--few_shot", type=str, default='0')
     parser.add_argument("--prefix_middim", type=int, default=512, help=" middim of mlp in prefixencoder ")
     parser.add_argument("--freeze", type=int, default=1)
