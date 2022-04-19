@@ -482,7 +482,6 @@ def clean_codeSearchNet_python(path):
                             # if first_char == '"' or last_char == '"' or first_char == "'" or last_char == '"':
                             #     code_tokens[n] = " ".join(token.split())
 
-                    # 删除后 idx是变化的
                     for m in range(len(annotation_idx)):
                         del code_tokens[annotation_idx[m] - m]
 
@@ -493,7 +492,7 @@ def clean_codeSearchNet_python(path):
                     code_token = ' '.join(code_token.split())
                     if check_contain_chinese(code_token):
                         continue
-                        #transcoder这里为什么python不和java cpp一致，调用.前后都加上空格呢？？
+
                     # code_token = code_token.replace('. ', '.').replace(' .', '.')
                     # code_token = code_token.replace('> >', '>>').replace('< <', '<<')
 
