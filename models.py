@@ -20,7 +20,7 @@ MODEL_CLASSES = {'roberta': (RobertaConfig, RobertaModel, RobertaTokenizer),
 
 class PromptEncoder(torch.nn.Module):
     '''
-    https://github.com/THUDM/P-tuning/blob/main/LAMA/p_tuning/prompt_encoder.py
+    based on https://github.com/THUDM/P-tuning/blob/main/LAMA/p_tuning/prompt_encoder.py
     '''
 
     def __init__(self, prompt_len, init_embedding):
@@ -49,7 +49,7 @@ class PromptEncoder(torch.nn.Module):
 
 class PrefixEncoder(torch.nn.Module):
     '''
-    https://github.com/XiangLi1999/PrefixTuning/blob/master/transformers/examples/control/train_control.py
+    based on https://github.com/XiangLi1999/PrefixTuning/blob/master/transformers/examples/control/train_control.py
     '''
 
     def __init__(self, num_trigs, config, init_embedding, mid_dim):
