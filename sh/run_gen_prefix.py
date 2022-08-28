@@ -327,10 +327,10 @@ def main():
 
     if (args.LMadaption == 2) and args.task == "translate" and (
             args.sub_task == 'java-cs' or args.sub_task == 'cs-java' or args.sub_task == 'java-cpp'):
-        args.load_model_path = "/mnt/sda/ys/codeT5/CodeT5/sh/saved_models/translate/java-cs/codet5_base_all_lr5_bs12_src320_trg256_pat5_e3_gradientAccumulationSteps1_LMadaption_onlyLMadaption_prefixlen0_prefixmiddim512_promptType3/checkpoint-last/pytorch_model.bin"
+        args.load_model_path = "../task_adaption_models/java-cs/pytorch_model.bin"
     if (args.LMadaption == 2) and args.task == "translate" and (
             args.sub_task == 'java-python' or args.sub_task == 'python-java'):
-        args.load_model_path = "/mnt/sda/ys/codeT5/CodeT5/sh/saved_models/translate/java-cs/codet5_base_all_lr5_bs12_src320_trg256_pat5_e2_gradientAccumulationSteps1_LMadaption2ForTranscoder_java-python_prefixlen0_prefixmiddim512_promptType3/checkpoint-last/pytorch_model.bin"
+        args.load_model_path = "../task_adaption_models/java-python/pytorch_model.bin"
     if (args.LMadaption == 2) and args.task == "translate" and (
             args.sub_task == 'java-go' or args.sub_task == 'go-java'):
         args.load_model_path = "/mnt/sda/ys/codeT5/CodeT5/sh/saved_models/translate/java-go/codet5_base_all_lr5_bs12_src320_trg256_pat5_e3_gradientAccumulationSteps1_LMadaption2ForLeetcode_java-go_prefixlen0_prefixmiddim512_promptType3/checkpoint-last/pytorch_model.bin"

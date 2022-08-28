@@ -90,7 +90,7 @@ def add_args(parser):
     parser.add_argument("--prompt_type", default=1, type=int, help="0 for soft prompt ,1 for prefixEncoder, 2 for prefix Decoder, 3 for prefix EN/Decoder")
     parser.add_argument("--gpu", default='0', type=str, )
     parser.add_argument("--freeze", default=1, type=int,help="whether freeze the pretrained model, note that for few-shot " )
-    parser.add_argument("--LMadaption", default=0, type=int,help="whether to using LMadapted checkpoints,1 for pretrained prefix, 2 for LMadaption,3 for LMadaption with prefix" )
+    parser.add_argument("--LMadaption", default=0, type=int,help="whether to using LMadapted(task-adapted) checkpoints,1 for pretrained prefix, 2 for task-adaption,3 for task-adaption with prefix" )
 
     parser.add_argument("--save_steps", default=-1, type=int, )
     parser.add_argument("--log_steps", default=-1, type=int, )
