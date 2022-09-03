@@ -9,10 +9,23 @@ We present FSCTrans, a novel few-shot learning based approach for low-resource c
 To evaluate our approach, we build a few-shot code transla-tion dataset that involves four translations (i.e., Java→Pytyhon, Python→Java, Java→C#, and C#→Java) from real-world projects and online judge problems. We compare our approach with six baseline approaches, including simple copy, Transformer, CodeBERT, CodeT5, TransCoder and Softprompt. Experimental results show that FSCTrans remarkably outperforms the state-of-the-art code translation models in few-shot set-tings. On average, FSCTrans improves CodeT5
 by 41.4% and 25.56% in terms of BLEU-4 and CodeBLEU.
 
+Here's the overview of our FSCTrans.
+
+![Results](./Overview.png)
+
 Our contributions can be summarized as:
 - We propose a few-shot code translation approach using prompt learning.
 - We propose a novel task adaption method to bridge the gap between the PLM and the translation task.
 - We evaluate our approach on a few-shot parallel codebase collected from real projects and online judge problems. Experiments have shown that our approach outperforms the state-of-the-art methods by a remarkable margin.
+
+**Model Architecture for Prompt Learning**
+
+Instead of merely tuning the embeddings of prompt tokens, we designed a prefix module which prepends a sequence of continuous tasksspecific vectors (prefix) to the input  to affect the activation layers of the
+PLMs directly. 
+
+We build FSCTrans based upon CodeT5. 
+
+![Results](./model_architecture.png)
 
 **Data**
 
