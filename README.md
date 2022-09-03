@@ -9,30 +9,19 @@ We present FSCTrans, a novel few-shot learning based approach for low-resource c
 To evaluate our approach, we build a few-shot code transla-tion dataset that involves four translations (i.e., Java→Pytyhon, Python→Java, Java→C#, and C#→Java) from real-world projects and online judge problems. We compare our approach with six baseline approaches, including simple copy, Transformer, CodeBERT, CodeT5, TransCoder and Softprompt. Experimental results show that FSCTrans remarkably outperforms the state-of-the-art code translation models in few-shot set-tings. On average, FSCTrans improves CodeT5
 by 41.4% and 25.56% in terms of BLEU-4 and CodeBLEU.
 
-Here's the overview of our FSCTrans.
-
-![Results](./Overview.png)
-
-Our contributions can be summarized as:
-- We propose a few-shot code translation approach using prompt learning.
-- We propose a novel task adaption method to bridge the gap between the PLM and the translation task.
-- We evaluate our approach on a few-shot parallel codebase collected from real projects and online judge problems. Experiments have shown that our approach outperforms the state-of-the-art methods by a remarkable margin.
-
 **Model Architecture for Prompt Learning**
 
 Instead of merely tuning the embeddings of prompt tokens, we designed a prefix module which prepends a sequence of continuous tasksspecific vectors (prefix) to the input  to affect the activation layers of the
 PLMs directly. 
 
-We build FSCTrans based upon CodeT5. 
+We build FSCTrans based upon CodeT5. Here's our model architecture.
 
-![Results](./model_architecture.png)
+![Results](./model.png)
 
-**Data**
+**Prefix Module**
 
+Source code for our prompt learning module is in [model.py](models.py). Source code for training is in [run_gen_prefix.py](sh/run_gen_prefix.py).
 
-Monolingual dataset of Java and Python can be downloaded from [CodeSeachNet](https://github.com/github/CodeSearchNet#downloading-data-from-s3). Monolingual data for C# can be downloaded from [https://drive.google.com/file/d/1Nermx98QW90yYNy4fvfTSycSh0BlVQv2/view?usp=sharing](https://drive.google.com/file/d/1Nermx98QW90yYNy4fvfTSycSh0BlVQv2/view?usp=sharing)
-
-Train/valid/test data is under ***./data_sample_8/translate/.*** The Java - C# pairs are sampled from [CodeXGLUE](https://github.com/microsoft/CodeXGLUE/tree/main/Code-Code/code-to-code-trans), and the Java - Python pairs are from [TransCoder](https://github.com/facebookresearch/TransCoder).
 
 **Model Checkpoints**
 
@@ -42,18 +31,28 @@ Task adapted CodeT5 checkpoint for java<->cs: [https://drive.google.com/drive/fo
 
 Task adapted CodeT5 checkpoint for java<->python: [https://drive.google.com/file/d/1ka653hGuJqw3-RkrM9p-If6O_1OplyrS/view?usp=sharing](https://drive.google.com/file/d/1ka653hGuJqw3-RkrM9p-If6O_1OplyrS/view?usp=sharing). Download it and place it under ***./task_adaption_models/java-python***
 
+**Data**
 
-**Prefix Module**
 
-Source code for our prompt learning module is in [model.py](models.py). Source code for training is in [run_gen_prefix.py](sh/run_gen_prefix.py).
+Monolingual dataset of Java and Python can be downloaded from [CodeSeachNet](https://github.com/github/CodeSearchNet#downloading-data-from-s3). Monolingual data for C# can be downloaded from [https://drive.google.com/file/d/1Nermx98QW90yYNy4fvfTSycSh0BlVQv2/view?usp=sharing](https://drive.google.com/file/d/1Nermx98QW90yYNy4fvfTSycSh0BlVQv2/view?usp=sharing)
+
+Train/valid/test data is under ***./data_sample_8/translate/.*** The Java - C# pairs are sampled from [CodeXGLUE](https://github.com/microsoft/CodeXGLUE/tree/main/Code-Code/code-to-code-trans), and the Java - Python pairs are from [TransCoder](https://github.com/facebookresearch/TransCoder).
+
 
 **Usage**
 
-1. First, you need to install our version of Transformers in ***./myTransformers***, following [https://huggingface.co/docs/transformers/installation#editable-install](https://huggingface.co/docs/transformers/installation#editable-install). As mentioned in the paper, our prefix modules leverage the past_key_values in Transformers to to pass the prefix into CodeT5. To enabling passing labels together with the past_key_values to both Encoder and Decoder of T5ForConditionalGeneration Model in Transformers, we have modified the orginal ***src/transformers/models/t5/modeling_t5.py*** in Transformers.
+1. First, you need to install our version of Transformers in ***./myTransformers***, following [https://huggingface.co/docs/transformers/installation#editable-install](https://huggingface.co/docs/transformers/installation#editable-install). 
+   - As mentioned in the paper, our prefix modules leverage the past_key_values in Transformers to to pass the prefix into CodeT5. To enabling passing labels together with the past_key_values to both Encoder and Decoder of T5ForConditionalGeneration Model in Transformers, we have modified the orginal ***src/transformers/models/t5/modeling_t5.py*** in Transformers.
+
 
 2. Then download Model Checkpoints and place them under corresponding folders.
 
+
 3. Go to the ***./sh*** folder. Take the python->java translation as example,
+   - FSCTrans: prompt learning on the task-adapted codeT5 model. 
+   ```
+   python run_exp_softprompt.py --model_tag codet5_base --task translate --sub_task python-java --gpu 0 --gradient_accumulation_steps 1 --filename_end fewshot_8_FSCT --prompt_len 100 --prompt_type 3 --few_shot 8 --patience 300 --epoch 10000 --LMadaption 2
+   ```
    - Fine-tuning on the original codeT5:
    ```
    python run_exp_softprompt.py --model_tag codet5_base --task translate --sub_task python-java --gpu 0 --gradient_accumulation_steps 1 --filename_end fewshot_8_finetune --prompt_len 0 --prompt_type 3 --few_shot 8 --patience 300 --epoch 10000
@@ -61,10 +60,6 @@ Source code for our prompt learning module is in [model.py](models.py). Source c
    - Directly prompt learning on the original codeT5:
    ```
    python run_exp_softprompt.py --model_tag codet5_base --task translate --sub_task python-java --gpu 0 --gradient_accumulation_steps 1 --filename_end fewshot_8_prefix --prompt_len 100 --prompt_type 3 --few_shot 8 --patience 300 --epoch 10000
-   ```
-   - FSCTrans:
-   ```
-   python run_exp_softprompt.py --model_tag codet5_base --task translate --sub_task python-java --gpu 0 --gradient_accumulation_steps 1 --filename_end fewshot_8_FSCT --prompt_len 100 --prompt_type 3 --few_shot 8 --patience 300 --epoch 10000 --LMadaption 2
    ```
 
 
