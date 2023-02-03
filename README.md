@@ -38,7 +38,7 @@ Monolingual dataset of Java and Python can be downloaded from [CodeSeachNet](htt
 
 Train/valid/test data is under ***./data_sample_8/translate/.*** The Java - C# pairs are sampled from [CodeXGLUE](https://github.com/microsoft/CodeXGLUE/tree/main/Code-Code/code-to-code-trans), and the Java - Python pairs are from [TransCoder](https://github.com/facebookresearch/TransCoder).
 
-**Results**
+**Translation Results**
 
 We provide translation results by CodeT5 and FSCTrans of our few-shot dataset under ***./Results***
 
@@ -67,8 +67,8 @@ We provide translation results by CodeT5 and FSCTrans of our few-shot dataset un
 
 
 
-**Main Results**
+**Overall Performance**
 
 
-![Results](results.png)
+![Results](mainresults.png)
 
