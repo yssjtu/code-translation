@@ -70,5 +70,5 @@ We provide translation results by CodeT5 and FSCTrans of our few-shot dataset un
 **Overall Performance**
 
 
-![Results](mainresults.png)
+![Results](MainResults.png)
 
