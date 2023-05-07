@@ -1,0 +1,100 @@
+public void Serialize(ILittleEndianOutput out1){out1.WriteShort(field_1_vcenter);}
+public void AddAll(BlockList<T> src) { if (src.Size == 0) return; int srcDirIdx = 0; for (; srcDirIdx < src.TailDirIdx; srcDirIdx++) AddAll(src.Directory[srcDirIdx], 0, BLOCK_SIZE); if (src.TailBlkIdx != 0) AddAll(src.TailBlock, 0, src.TailBlkIdx);  }
+public void WriteByte(byte b) { if (upto == blockSize) { if (currentBlock != null) { AddBlock(currentBlock); } currentBlock = new byte[blockSize]; upto = 0; } currentBlock[upto++] = b; }
+public ObjectId GetObjectId() { return objectId; }
+public DeleteDomainEntryResult DeleteDomainEntry(DeleteDomainEntryRequest request) { request = beforeClientExecution(request); return executeDeleteDomainEntry(request); }
+public long RamBytesUsed() { return ((termOffsets != null) ? termOffsets.RamBytesUsed() : 0) + ((termsDictOffsets != null) ? termsDictOffsets.RamBytesUsed() : 0); }
+public string GetFullMessage() { byte[] raw = buffer; int msgB = RawParseUtils.TagMessage(raw, 0); if (msgB < 0) { return ""; } return RawParseUtils.Decode(GuessEncoding(), raw, msgB, raw.Length); }
+public POIFSFileSystem() { this(true); _header.SetBATCount(1); _header.SetBATArray(new int[] { 1 }); BATBlock bb = BATBlock.CreateEmptyBATBlock(bigBlockSize, false); bb.SetOurBlockIndex(1); _bat_blocks.Add(bb); SetNextBlock(0, POIFSConstants.END_OF_CHAIN); SetNextBlock(1, POIFSConstants.FAT_SECTOR_BLOCK); _property_table.SetStartBlock(0); }
+public void init(int address) { slice = pool.buffers[address / ByteBlockPool.BYTE_BLOCK_SHIFT]; assert slice != null; upto = address % ByteBlockPool.BYTE_BLOCK_MASK; offset0 = address; assert upto < slice.Length; }
+public SubmoduleAddCommand SetPath(string path) { this.path = path; return this; }
+public ListIngestionsResult ListIngestions(ListIngestionsRequest request) { request = BeforeClientExecution(request); return ExecuteListIngestions(request); }
+public QueryParserTokenManager(CharStream stream, int lexState) { this(stream); SwitchTo(lexState); }
+public GetShardIteratorResult GetShardIterator(GetShardIteratorRequest request)  { request = BeforeClientExecution(request); return ExecuteGetShardIterator(request); }
+public ModifyStrategyRequest() : base("aegis", "2016-11-11", "ModifyStrategy", "vipaegis") { SetMethod(MethodType.POST); }
+public bool Ready() { lock (lockObject) { if (inputStreamReader == null) { throw new IOException("InputStreamReader is closed"); } try { return byteBuffer.HasRemaining || inputStreamReader.BaseStream.CanRead; } catch (IOException) { return false; } } }
+public EscherOptRecord GetOptRecord() { return _optRecord; }
+public override int Read(byte[] buffer, int offset, int length) { if (buffer == null) { throw new ArgumentNullException("buffer"); } if (offset < 0 || length < 0 || offset + length > buffer.Length) { throw new ArgumentOutOfRangeException(); } if (pos >= count) { return -1; } int copylen = count - pos < length ? count - pos : length; for (int i = 0; i < copylen; i++) { buffer[offset + i] = (byte)buffer[pos + i]; } pos += copylen; return copylen; }
+public OpenNLPSentenceBreakIterator(NLPSentenceDetectorOp sentenceOp) { this.sentenceOp = sentenceOp; }
+public void Print(string str) { Write(str ?? Convert.ToString(null)); }
+public NotImplementedFunctionException(string functionName, NotImplementedException cause) : base(functionName, cause) { this.functionName = functionName; }
+public V Next() { return base.NextEntry().Value; }
+public void readBytes(byte[] b, int offset, int len, bool useBuffer) { int available = bufferLength - bufferPosition; if (len <= available) { if (len > 0) { Array.Copy(buffer, bufferPosition, b, offset, len); bufferPosition += len; } } else { if (available > 0) { Array.Copy(buffer, bufferPosition, b, offset, available); offset += available; len -= available; bufferPosition += available; } if (useBuffer && len < bufferSize) { Refill(); if (bufferLength < len) { Array.Copy(buffer, 0, b, offset, bufferLength); throw new EndOfStreamException("read past EOF: " + this); } else { Array.Copy(buffer, 0, b, offset, len); bufferPosition = len; } } else { long after = bufferStart + bufferPosition + len; if (after > length()) { throw new EndOfStreamException("read past EOF: " + this); } ReadInternal(b, offset, len); bufferStart = after; bufferPosition = 0; bufferLength = 0; } } }
+public TagQueueResult TagQueue(TagQueueRequest request) { request = BeforeClientExecution(request); return ExecuteTagQueue(request); }
+public void Remove() { throw new NotSupportedException(); }
+public CacheSubnetGroup ModifyCacheSubnetGroup(ModifyCacheSubnetGroupRequest request) { request = BeforeClientExecution(request); return ExecuteModifyCacheSubnetGroup(request); }
+public void setParams(string parameters) { base.setParams(parameters); language = country = variant = ""; var st = new StringTokenizer(parameters, ","); if (st.hasMoreTokens()) language = st.nextToken(); if (st.hasMoreTokens()) country = st.nextToken(); if (st.hasMoreTokens()) variant = st.nextToken(); }
+public DeleteDocumentationVersionResult DeleteDocumentationVersion(DeleteDocumentationVersionRequest request) { request = BeforeClientExecution(request); return ExecuteDeleteDocumentationVersion(request); }
+public override bool Equals(object obj) { if (!(obj is FacetLabel)) { return false; } FacetLabel other = (FacetLabel)obj; if (Length != other.Length) { return false; } for (int i = Length - 1; i >= 0; i--) { if (!Components[i].Equals(other.Components[i])) { return false; } } return true; }
+public GetInstanceAccessDetailsResult GetInstanceAccessDetails(GetInstanceAccessDetailsRequest request) { request = BeforeClientExecution(request); return ExecuteGetInstanceAccessDetails(request); }
+public HSSFPolygon CreatePolygon(HSSFChildAnchor anchor) { HSSFPolygon shape = new HSSFPolygon(this, anchor); shape.SetParent(this); shape.SetAnchor(anchor); shapes.Add(shape); OnCreate(shape); return shape; }
+public string GetSheetName(int sheetIndex) { return GetBoundSheetRec(sheetIndex).Sheetname; }
+public GetDashboardResult GetDashboard(GetDashboardRequest request) { request = BeforeClientExecution(request); return ExecuteGetDashboard(request); }
+public AssociateSigninDelegateGroupsWithAccountResult AssociateSigninDelegateGroupsWithAccount(AssociateSigninDelegateGroupsWithAccountRequest request) { request = BeforeClientExecution(request); return ExecuteAssociateSigninDelegateGroupsWithAccount(request); }
+public void AddMultipleBlanks(MulBlankRecord mbr) { for (int j = 0; j < mbr.NumColumns; j++) { BlankRecord br = new BlankRecord(); br.Column = (short)(j + mbr.FirstColumn); br.Row = mbr.Row; br.XFIndex = mbr.GetXFAt(j); InsertCell(br); } }
+public static string Quote(string str) { StringBuilder sb = new StringBuilder(); sb.Append("\\Q"); int apos = 0; int k; while ((k = str.IndexOf("\\E", apos)) >= 0) { sb.Append(str.Substring(apos, k + 2 - apos)).Append("\\\\E\\Q"); apos = k + 2; } return sb.Append(str.Substring(apos)).Append("\\E").ToString(); }
+public ByteBuffer PutInt(int value) { throw new ReadOnlyBufferException(); }
+public ArrayPtg(object[][] values2d) { int nColumns = values2d[0].Length; int nRows = values2d.Length; _nColumns = (short)nColumns; _nRows = (short)nRows; object[] vv = new object[_nColumns * _nRows]; for (int r = 0; r < nRows; r++) { object[] rowData = values2d[r]; for (int c = 0; c < nColumns; c++) { vv[getValueIndex(c, r)] = rowData[c]; } } _arrayValues = vv; _reserved0Int = 0; _reserved1Short = 0; _reserved2Byte = 0; }
+public GetIceServerConfigResult GetIceServerConfig(GetIceServerConfigRequest request) { request = BeforeClientExecution(request); return ExecuteGetIceServerConfig(request); }
+public override string ToString() { return GetType().FullName + " [" + GetValueAsString() + "]"; }
+public String toString(String field)  { return "ToChildBlockJoinQuery ("+parentQuery.toString()+")"; }
+public void IncRef() { refCount.IncrementAndGet(); }
+public UpdateConfigurationSetSendingEnabledResult UpdateConfigurationSetSendingEnabled(UpdateConfigurationSetSendingEnabledRequest request) { request = BeforeClientExecution(request); return ExecuteUpdateConfigurationSetSendingEnabled(request); }
+public int GetNextXBATChainOffset() { return GetXBATEntriesPerBlock() * LittleEndianConsts.INT_SIZE; }
+public void MultiplyByPowerOfTen(int pow10) { var tp = TenPower.GetInstance(Math.Abs(pow10)); if (pow10 < 0) { MulShift(tp.Divisor, tp.DivisorShift); } else { MulShift(tp.Multiplicand, tp.MultiplierShift); } }
+public override string ToString() { StringBuilder b = new StringBuilder(); int l = Length; b.Append(Path.DirectorySeparatorChar); for (int i = 0; i < l; i++) { b.Append(GetComponent(i)); if (i < l - 1) { b.Append(Path.DirectorySeparatorChar); } } return b.ToString(); }
+public InstanceProfileCredentialsProvider withFetcher(ECSMetadataServiceCredentialsFetcher fetcher) { this.fetcher = fetcher; this.fetcher.setRoleName(roleName); return this; }
+public void SetProgressMonitor(ProgressMonitor pm) { progressMonitor = pm; }
+public void Reset() { if (!First()) { ptr = 0; if (!Eof()) ParseEntry(); } }
+public E Previous() { if (iterator.PreviousIndex() >= start) { return iterator.Previous(); } throw new NoSuchElementException(); }
+public string GetNewPrefix() { return this.newPrefix; }
+public int IndexOfValue(int value) { for (int i = 0; i < mSize; i++) if (mValues[i] == value) return i; return -1; }
+public List<CharsRef> UniqueStems(char[] word, int length)  { List<CharsRef> stems = Stem(word, length); if (stems.Count < 2)  { return stems; } CharArraySet terms = new CharArraySet(8, dictionary.IgnoreCase); List<CharsRef> deduped = new List<CharsRef>(); foreach (CharsRef s in stems)  { if (!terms.Contains(s))  { deduped.Add(s); terms.Add(s); } } return deduped; }
+public GetGatewayResponsesResult GetGatewayResponses(GetGatewayResponsesRequest request) { request = BeforeClientExecution(request); return ExecuteGetGatewayResponses(request); }
+public void setPosition(long pos) { currentBlockIndex = (int) (pos >> blockBits); currentBlock = blocks[currentBlockIndex]; currentBlockUpto = (int) (pos & blockMask); }
+public long Skip(long n) { int s = (int) Math.Min(Available(), Math.Max(0, n)); ptr += s; return s; }
+public BootstrapActionDetail(BootstrapActionConfig bootstrapActionConfig) { BootstrapActionConfig = bootstrapActionConfig; }
+public void Serialize(LittleEndianOutput out) { out.WriteShort(field_1_row); out.WriteShort(field_2_col); out.WriteShort(field_3_flags); out.WriteShort(field_4_shapeid); out.WriteShort(field_6_author.Length); out.WriteByte((byte)(field_5_hasMultibyte ? 0x01 : 0x00)); if (field_5_hasMultibyte) { StringUtil.PutUnicodeLE(field_6_author, out); } else { StringUtil.PutCompressedUnicode(field_6_author, out); } if (field_7_padding != null) { out.WriteByte((byte)field_7_padding.Value); } }
+public int LastIndexOf(string s) { return LastIndexOf(s, count); }
+public bool Add(E item) { linkedList.AddLast(item); return true; }
+public void UnsetSection(string section, string subsection) { ConfigSnapshot src, res; do { src = state.Get(); res = UnsetSection(src, section, subsection); } while (!state.CompareAndSet(src, res)); }
+public string GetTagName() { return tagName; }
+public void AddSubRecord(int index, SubRecord element) { subrecords.Insert(index, element); }
+public bool Remove(T item) { lock (mutex) { return list.Remove(item); } }
+public DoubleMetaphoneFilter Create(TokenStream input) { return new DoubleMetaphoneFilter(input, maxCodeLength, inject); }
+public long Length() { return InCoreLength(); }
+public void SetValue(bool newValue) { value = newValue; }
+public class Pair { private ContentSource oldSource; private ContentSource newSource; public Pair(ContentSource oldSource, ContentSource newSource) { this.oldSource = oldSource; this.newSource = newSource; } }
+public int Get(int i) { if (count <= i) throw new IndexOutOfRangeException(i.ToString()); return entries[i]; }
+public CreateRepoRequest() : base("cr", "2016-06-07", "CreateRepo", "cr") { SetUriPattern("/repos"); SetMethod(MethodType.PUT); }
+public bool IsDeltaBaseAsOffset() { return deltaBaseAsOffset; }
+public bool Remove() { if (expectedModCount == list.modCount) { if (lastLink != null) { Link<ET> next = lastLink.next; Link<ET> previous = lastLink.previous; next.previous = previous; previous.next = next; if (lastLink == link) { pos--; } link = previous; lastLink = null; expectedModCount++; list.size--; list.modCount++; } else { throw new InvalidOperationException(); } } else { throw new InvalidOperationException(); } }
+public MergeShardsResult MergeShards(MergeShardsRequest request) { request = BeforeClientExecution(request); return ExecuteMergeShards(request); }
+public AllocateHostedConnectionResult AllocateHostedConnection(AllocateHostedConnectionRequest request) { request = BeforeClientExecution(request); return ExecuteAllocateHostedConnection(request); }
+public int BeginIndex { get { return start; } }
+public static readonly WeightedTerm[] GetTerms(Query query) { return GetTerms(query, false); }
+public ByteBuffer Compact() { throw new ReadOnlyBufferException(); }
+public void Decode(byte[] blocks, int blocksOffset, long[] values, int valuesOffset, int iterations) { for (int i = 0; i < iterations; ++i) { long byte0 = blocks[blocksOffset++] & 0xFF; values[valuesOffset++] = byte0 >> 2; long byte1 = blocks[blocksOffset++] & 0xFF; values[valuesOffset++] = ((byte0 & 3) << 4) | (byte1 >> 4); long byte2 = blocks[blocksOffset++] & 0xFF; values[valuesOffset++] = ((byte1 & 15) << 2) | (byte2 >> 6); values[valuesOffset++] = byte2 & 63; } }
+public string GetHumanishName() { string s = GetPath(); if ("/".Equals(s) || "".Equals(s)) s = GetHost(); if (s == null) throw new ArgumentException(); string[] elements; if ("file".Equals(Scheme) || LOCAL_FILE.IsMatch(s)) elements = Regex.Split(s, "[\\" + Path.DirectorySeparatorChar + "/]"); else elements = s.Split("/+"); if (elements.Length == 0) throw new ArgumentException(); string result = elements[elements.Length - 1]; if (Constants.DOT_GIT.Equals(result)) result = elements[elements.Length - 2]; else if (result.EndsWith(Constants.DOT_GIT_EXT)) result = result.Substring(0, result.Length - Constants.DOT_GIT_EXT.Length); return result; }
+public DescribeNotebookInstanceLifecycleConfigResult DescribeNotebookInstanceLifecycleConfig(DescribeNotebookInstanceLifecycleConfigRequest request) { request = BeforeClientExecution(request); return ExecuteDescribeNotebookInstanceLifecycleConfig(request); }
+public string AccessKeySecret { get { return this.accessKeySecret; } }
+public CreateVpnConnectionResult CreateVpnConnection(CreateVpnConnectionRequest request) { request = BeforeClientExecution(request); return ExecuteCreateVpnConnection(request); }
+public DescribeVoicesResult DescribeVoices(DescribeVoicesRequest request) { request = BeforeClientExecution(request); return ExecuteDescribeVoices(request); }
+public ListMonitoringExecutionsResponse ListMonitoringExecutions(ListMonitoringExecutionsRequest request) { request = BeforeClientExecution(request); return Execute<ListMonitoringExecutionsRequest, ListMonitoringExecutionsResponse>(request, _internalRequestExceptionHandler); }
+public DescribeJobRequest(string vaultName, string jobId) { VaultName = vaultName; JobId = jobId; }
+public EscherRecord GetEscherRecord(int index) { return escherRecords[index]; }
+public GetApisResponse GetApis(GetApisRequest request) { request = BeforeClientExecution(request); return Execute<GetApisResponse>(request); }
+public DeleteSmsChannelResult DeleteSmsChannel(DeleteSmsChannelRequest request) { request = BeforeClientExecution(request); return Execute<DeleteSmsChannelResult>(request); }
+public TrackingRefUpdate GetTrackingRefUpdate() { return trackingRefUpdate; }
+public void Print(bool b) { Print(b.ToString()); }
+public QueryNode Child => GetChildren()[0];
+public NotIgnoredFilter(int workdirTreeIndex) { this.index = workdirTreeIndex; }
+public AreaRecord(RecordInputStream input) { field_1_formatFlags = input.ReadShort(); }
+public GetThumbnailRequest() : base("CloudPhoto", "2017-07-11", "GetThumbnail", "cloudphoto") { SetProtocol(ProtocolType.HTTPS); }
+public DescribeTransitGatewayVpcAttachmentsResult DescribeTransitGatewayVpcAttachments(DescribeTransitGatewayVpcAttachmentsRequest request) { request = BeforeClientExecution(request); return ExecuteDescribeTransitGatewayVpcAttachments(request); }
+public PutVoiceConnectorStreamingConfigurationResult PutVoiceConnectorStreamingConfiguration(PutVoiceConnectorStreamingConfigurationRequest request) { request = BeforeClientExecution(request); return ExecutePutVoiceConnectorStreamingConfiguration(request); }
+public OrdRange GetOrdRange(string dim) { return prefixToOrdRange[dim]; }
+public override string ToString() { string symbol = ""; if (startIndex >= 0 && startIndex < InputStream.Size) { symbol = InputStream.GetText(new Interval(startIndex, startIndex)); symbol = Utils.EscapeWhitespace(symbol, false); } return string.Format(CultureInfo.CurrentCulture, "{0}('{1}')", typeof(LexerNoViableAltException).Name, symbol); }
+public E peek() { return peekFirstImpl(); }
+public CreateWorkspacesResult CreateWorkspaces(CreateWorkspacesRequest request) { request = BeforeClientExecution(request); return ExecuteCreateWorkspaces(request); }
+public NumberFormatIndexRecord(NumberFormatIndexRecord other) : base(other) { this.formatIndex = other.formatIndex; }
