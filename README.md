@@ -1,6 +1,6 @@
 # Few-Shot Code Translation via Task-adapted Prompt Learning
 
-This replication package for our paper **Few-Shot Code Translation via Task-adapted Prompt Learning** includes source code of our model, dataset and results. We hope this artifact can motivate and help future research on code translation and prompt learning.
+This replication package for our paper "**Few-Shot Code Translation via Task-adapted Prompt Learning**" includes source code of our model, dataset and results. We hope this artifact can motivate and help future research on code translation and prompt learning.
 
 
 **Introduction**
